@@ -1,10 +1,19 @@
 $(document).ready( function() {
-	$('.unanswered-getter').submit( function(event){
-		// zero out results if previous search has run
+	$('.forms > form').submit( function(event){
+		// zero out results if previous search has runv
 		$('.results').html('');
 		// get the value of the tags the user submitted
-		var tags = $(this).find("input[name='tags']").val();
-		getUnanswered(tags);
+		var tags = $(this).serializeArray();
+		var formName = tags[0].name;
+		var formValue = tags[0].value;
+		switch(formName){
+			case 'tags':
+			getUnanswered(formValue);
+			break;
+			case 'bags':
+			getTopanswer(formValue);
+			break;
+		}
 	});
 });
 
@@ -56,6 +65,23 @@ var showError = function(error){
 	errorElem.append(errorText);
 };
 
+var getTopanswer = function(tags) {
+
+	var requestSecond = {site: 'stackoverflow'
+								  };
+
+	var resultSecond = $.ajax({
+		url: "http://api.stackexchange.com/2.2/tags/"+tags+"/top-answerers/all_time/",
+		data: requestSecond,
+		dataType: "jsonp",
+		type: "GET",
+	})
+	.done(function(resultSecond){
+		console.log(tags);
+		console.log(resultSecond);
+	})
+
+}
 // takes a string of semi-colon separated tags to be searched
 // for on StackOverflow
 var getUnanswered = function(tags) {
@@ -65,7 +91,6 @@ var getUnanswered = function(tags) {
 								site: 'stackoverflow',
 								order: 'desc',
 								sort: 'creation'};
-	
 	var result = $.ajax({
 		url: "http://api.stackexchange.com/2.2/questions/unanswered",
 		data: request,
