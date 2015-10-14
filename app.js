@@ -77,6 +77,7 @@ var getTopanswer = function(tags) {
 		type: "GET",
 	})
 	.done(function(resultSecond){
+		// do stuff
 		console.log(tags);
 		console.log(resultSecond);
 	})
