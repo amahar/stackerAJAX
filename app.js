@@ -78,8 +78,10 @@ var getTopanswer = function(tags) {
 	})
 	.done(function(resultSecond){
 		// do stuff
-		console.log(tags);
 		console.log(resultSecond);
+		var searchResults = showSearchResults(tags,resultSecond.items.length);
+
+		$('.search-results').html(searchResults)
 	})
 
 }
